@@ -49,6 +49,8 @@ const Course = ({ course }) => (
       </div>
       <div className="card-text">{course.title}</div>
     </div>
+    <hr />
+    <div className="card-text">{course.meets}</div>
   </div>
 );
 
