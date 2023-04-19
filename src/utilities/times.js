@@ -1,3 +1,5 @@
+import { getCourseTerm } from "./../components/Course";
+
 export const terms = { F: "Fall", W: "Winter", S: "Spring" };
 
 const days = ["M", "Tu", "W", "Th", "F"];
@@ -49,8 +51,3 @@ const timeConflict = (course1, course2) =>
 const courseConflict = (course1, course2) =>
   getCourseTerm(course1) === getCourseTerm(course2) &&
   timeConflict(course1, course2);
-
-export const getCourseTerm = (course) => {
-  const id = course.id || "";
-  return terms[id.charAt(0)] || "";
-};

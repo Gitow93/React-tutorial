@@ -1,5 +1,5 @@
-import { getCourseTerm, terms } from "./../utilities/times";
-import Course from "./Course.js";
+import { terms } from "./../utilities/times";
+import { getCourseTerm, Course } from "./Course";
 import React, { useState } from "react";
 
 const CourseList = ({ courses }) => {

@@ -1,6 +1,6 @@
 import { hasConflict, terms } from "./../utilities/times";
 
-const Course = ({ course, selected, setSelected }) => {
+export const Course = ({ course, selected, setSelected }) => {
   const isSelected = selected.includes(course);
   const isDisabled = !isSelected && hasConflict(course, selected);
   const style = {
@@ -36,5 +36,3 @@ export const getCourseTerm = (course) => {
 
 const toggle = (x, lst) =>
   lst.includes(x) ? lst.filter((y) => y !== x) : [x, ...lst];
-
-export default Course;
