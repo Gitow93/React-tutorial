@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
+import { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
-import { ref, getDatabase } from "firebase/database";
-import { useDatabaseValue } from "@react-query-firebase/database";
+import { getDatabase, onValue, ref } from "firebase/database";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -22,15 +22,39 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
-console.log(database);
-export const useData = (path, transform) => {
-  const { data, isLoading, error } = useDatabaseValue(
-    path,
-    ref(database, path),
-    { subscribe: true }
-  );
-  const value = !isLoading && !error && transform ? transform(data) : data;
 
-  return [value, isLoading, error];
+const database = getDatabase(app);
+
+export const useData = (path, transform) => {
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
+
+  useEffect(() => {
+    const dbRef = ref(database, path);
+    const devMode =
+      !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+    if (devMode) {
+      console.log(`loading ${path}`);
+    }
+    return onValue(
+      dbRef,
+      (snapshot) => {
+        const val = snapshot.val();
+        if (devMode) {
+          console.log(val);
+        }
+        setData(transform ? transform(val) : val);
+        setLoading(false);
+        setError(null);
+      },
+      (error) => {
+        setData(null);
+        setLoading(false);
+        setError(error);
+      }
+    );
+  }, [path, transform]);
+
+  return [data, loading, error];
 };
